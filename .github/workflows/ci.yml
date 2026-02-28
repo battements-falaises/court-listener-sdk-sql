@@ -1,0 +1,61 @@
+name: CI
+on:
+  push:
+    branches-ignore:
+      - 'generated'
+      - 'codegen/**'
+      - 'integrated/**'
+      - 'stl-preview-head/**'
+      - 'stl-preview-base/**'
+  pull_request:
+    branches-ignore:
+      - 'stl-preview-head/**'
+      - 'stl-preview-base/**'
+
+jobs:
+  test:
+    timeout-minutes: 10
+    name: test
+    runs-on: ${{ github.repository == 'stainless-sdks/court-listener-sdk-sql' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install PostgreSQL 14
+        run: |
+          # Add PostgreSQL APT repository
+          sudo apt-get update
+          sudo apt-get install -y postgresql-common
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+
+          # Install PostgreSQL 14, the oldest non-EOL version (https://endoflife.date/postgresql)
+          sudo apt-get update
+          sudo apt-get install -y postgresql-14 postgresql-contrib-14 postgresql-plpython3-14
+
+          # Update PATH
+          echo /usr/lib/postgresql/14/bin >> $GITHUB_PATH
+
+      - name: Set up PostgreSQL directory
+        run: |
+          sudo mkdir -p /var/run/postgresql
+          sudo chown -R $USER:$USER /var/run/postgresql
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: '0.9.21'
+
+      - name: Retrieve Python package GitHub access token
+        uses: stainless-api/retrieve-github-access-token@v1
+        id: get_token
+        with:
+          repo: stainless-sdks/court-listener-sdk-python
+          stainless-api-key: ${{ secrets.STAINLESS_API_KEY }}
+
+      - name: Configure Python package GitHub access token
+        run: |
+          echo "${{ steps.get_token.outputs.github_access_token }}" | gh auth login --with-token
+          gh auth setup-git
+
+      - name: Run tests
+        run: ./scripts/test
