@@ -1,0 +1,2 @@
+test: create_extension
+test: court_listener_sdk_courts_test court_listener_sdk_dockets_test court_listener_sdk_clusters_test court_listener_sdk_opinions_test

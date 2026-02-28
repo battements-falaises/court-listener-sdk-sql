@@ -1,0 +1,47 @@
+{
+  "name": "court_listener_sdk",
+  "abstract": "The official PostgreSQL extension for the Court Listener API.",
+  "tags": [
+    "api",
+    "http",
+    "rest",
+    "sdk"
+  ],
+  "version": "0.0.1",
+  "release_status": "testing",
+  "maintainer": "Court Listener <>",
+  "generated_by": "Stainless (https://stainless.com)",
+  "license": "apache_2_0",
+  "resources": {
+    "homepage": "https://www.courtlistener.com/contact/",
+    "bugtracker": {
+      "web": "https://www.github.com/stainless-sdks/court-listener-sdk-sql/issues",
+      "mailto": ""
+    },
+    "repository": {
+      "url": "git://github.com/stainless-sdks/court-listener-sdk-sql.git",
+      "web": "https://www.github.com/stainless-sdks/court-listener-sdk-sql",
+      "type": "git"
+    }
+  },
+  "provides": {
+    "court_listener_sdk": {
+      "abstract": "The official PostgreSQL extension for the Court Listener API.",
+      "file": "sql/build/court_listener_sdk--0.0.1.sql",
+      "docfile": "README.md",
+      "version": "0.0.1"
+    }
+  },
+  "prereqs": {
+    "runtime": {
+      "requires": {
+        "PostgreSQL": "14.0.0",
+        "plpython3u": "0"
+      }
+    }
+  },
+  "meta-spec": {
+    "version": "1.0.0",
+    "url": "https://pgxn.org/meta/spec.txt"
+  }
+}
