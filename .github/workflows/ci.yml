@@ -45,17 +45,5 @@ jobs:
         with:
           version: '0.9.21'
 
-      - name: Retrieve Python package GitHub access token
-        uses: stainless-api/retrieve-github-access-token@v1
-        id: get_token
-        with:
-          repo: stainless-sdks/court-listener-sdk-python
-          stainless-api-key: ${{ secrets.STAINLESS_API_KEY }}
-
-      - name: Configure Python package GitHub access token
-        run: |
-          echo "${{ steps.get_token.outputs.github_access_token }}" | gh auth login --with-token
-          gh auth setup-git
-
       - name: Run tests
         run: ./scripts/test

@@ -3,5 +3,5 @@ name = "court_listener_sdk-sql"
 version = "0.0.0"
 requires-python = ">=3.9.18"
 dependencies = [
-    "court_listener_sdk @ https://github.com/stainless-sdks/court-listener-sdk-python.git",
+    "court_listener_sdk @ https://github.com/battements-falaises/court-listener-sdk-python.git",
 ]
