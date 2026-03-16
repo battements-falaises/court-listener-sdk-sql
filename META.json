@@ -15,12 +15,12 @@
   "resources": {
     "homepage": "https://www.courtlistener.com/contact/",
     "bugtracker": {
-      "web": "https://www.github.com/stainless-sdks/court-listener-sdk-sql/issues",
+      "web": "https://www.github.com/battements-falaises/court-listener-sdk-sql/issues",
       "mailto": ""
     },
     "repository": {
-      "url": "git://github.com/stainless-sdks/court-listener-sdk-sql.git",
-      "web": "https://www.github.com/stainless-sdks/court-listener-sdk-sql",
+      "url": "git://github.com/battements-falaises/court-listener-sdk-sql.git",
+      "web": "https://www.github.com/battements-falaises/court-listener-sdk-sql",
       "type": "git"
     }
   },
