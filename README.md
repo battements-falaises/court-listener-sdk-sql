@@ -6,7 +6,7 @@
 >
 > This extension has not yet been exhaustively tested in production environments and may be missing some features you'd expect in a stable release. As we continue development, there may be breaking changes that require updates to your code.
 >
-> **We'd love your feedback!** Please share any suggestions, bug reports, feature requests, or general thoughts by [filing an issue](https://www.github.com/stainless-sdks/court-listener-sdk-sql/issues/new).
+> **We'd love your feedback!** Please share any suggestions, bug reports, feature requests, or general thoughts by [filing an issue](https://www.github.com/battements-falaises/court-listener-sdk-sql/issues/new).
 
 The Court Listener API PostgreSQL Extension provides convenient access to the [Court Listener REST API](https://www.courtlistener.com/contact/) from PostgreSQL.
 
@@ -19,7 +19,7 @@ The REST API documentation can be found on [www.courtlistener.com](https://www.c
 Clone the repository:
 
 ```sh
-git clone git@github.com:stainless-sdks/court-listener-sdk-sql.git
+git clone git@github.com:battements-falaises/court-listener-sdk-sql.git
 cd court-listener-sdk-sql
 ```
 
@@ -39,8 +39,8 @@ CREATE EXTENSION court_listener_sdk;
 And install the Python SDK dependency:
 
 ```sh
-# install from the production repo
-pip install git+ssh://git@github.com/battements-falaises/court-listener-sdk-python.git
+# install from PyPI
+pip install court_listener_sdk
 ```
 
 See [`./scripts/test`](./scripts/test) how to use a [Python virtual environment](https://docs.python.org/3/library/sys_path_init.html#sys-path-init-virtual-environments) if you prefer that instead.
@@ -107,6 +107,23 @@ LIMIT 200;
 > removed, then PostgreSQL may not [push down the condition](https://wiki.postgresql.org/wiki/Inlining_of_SQL_functions),
 > causing all pages to be requested and buffered.
 
+## Caching
+
+Sending requests to the Court Listener API for every SQL query can be slow. Combine [materialized views](https://www.postgresql.org/docs/current/rules-materializedviews.html) with [`pg_cron`](https://github.com/citusdata/pg_cron) for scheduled data pulls:
+
+```sql
+CREATE MATERIALIZED VIEW court_listener_sdk_courts AS
+SELECT *
+FROM court_listener_sdk_courts.list();
+
+-- Refresh the view every 4 hours.
+SELECT cron.schedule(
+  'refresh-court-listener-sdk-courts',
+  '0 */4 * * *',
+  'REFRESH MATERIALIZED VIEW CONCURRENTLY court_listener_sdk_courts'
+);
+```
+
 ## Troubleshooting
 
 ### Installation
@@ -167,4 +184,4 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/court-listener-sdk-sql/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/battements-falaises/court-listener-sdk-sql/issues) with questions, bugs, or suggestions.
